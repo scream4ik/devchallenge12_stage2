@@ -1,0 +1,71 @@
+swagger: '2.0'
+
+paths:
+  /:
+    post:
+      tags:
+        - base
+      summary: Minimize only used css styles for given url
+      parameters:
+        - in: body
+          name: urls
+          required: true
+          schema:
+            type: array
+            items:
+              type: string
+              example: https://google.com/
+          description: List of urls
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                url:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      is_valid:
+                        type: boolean
+                        example: true
+                      css:
+                        type: string
+                        example: '@charset "utf-8";.content{display:block}h1{font-size:16px}'
+                      unused_css_percentage:
+                        type: integer
+                        example: 97
+        '400':
+          description: Validation error
+
+  /cache-invalidate:
+    get:
+      tags:
+        - base
+      summary: Invalidate all cache or by given url
+      parameters:
+        - in: query
+          name: url
+          type: string
+          required: false
+          description: url for invalidatation
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+
+  /test:
+    get:
+      tags:
+        - base
+      summary: Data for calc unused css styles
+      responses:
+        '200':
+          description: OK

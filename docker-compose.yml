@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  app:
+    build: .
+    command: /bin/bash -c "adev runserver -v"
+    ports:
+      - "8000:8000"
+    environment:
+      - AIO_APP_PATH=app/
+      - APP_REDIS_URL=redis://h:@redis:6379/0
+      - APP_URL_EXPIRE=86400
+    volumes:
+      - .:/code
+      - ./docker_data/pyppeteer:/root/.pyppeteer
+    depends_on:
+      - redis
+
+  redis:
+    restart: always
+    image: redis:latest
+    volumes:
+      - ./docker_data/redis:/data
